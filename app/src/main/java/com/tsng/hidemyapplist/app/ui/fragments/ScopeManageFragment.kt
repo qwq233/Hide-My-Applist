@@ -12,7 +12,6 @@ import com.tsng.hidemyapplist.app.JsonConfigManager.globalConfig
 import com.tsng.hidemyapplist.app.helpers.AppInfoHelper
 import com.tsng.hidemyapplist.app.startFragment
 import com.tsng.hidemyapplist.app.ui.adapters.AppSelectAdapter
-import com.tsng.hidemyapplist.app.ui.views.Ads
 import com.tsng.hidemyapplist.databinding.FragmentAppSelectBinding
 import java.text.Collator
 import java.util.*
@@ -36,7 +35,6 @@ class ScopeManageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAppSelectBinding.inflate(inflater, container, false)
-        binding.adBanner.loadAd(Ads.appSelectAd)
         binding.refreshLayout.setOnRefreshListener { refresh() }.autoRefresh()
         return binding.root
     }

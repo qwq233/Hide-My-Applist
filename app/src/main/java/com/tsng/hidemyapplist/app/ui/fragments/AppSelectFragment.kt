@@ -11,7 +11,6 @@ import com.github.kyuubiran.ezxhelper.utils.runOnMainThread
 import com.tsng.hidemyapplist.R
 import com.tsng.hidemyapplist.app.helpers.AppInfoHelper
 import com.tsng.hidemyapplist.app.ui.adapters.AppSelectAdapter
-import com.tsng.hidemyapplist.app.ui.views.Ads
 import com.tsng.hidemyapplist.databinding.FragmentAppSelectBinding
 import java.text.Collator
 import java.util.*
@@ -50,7 +49,6 @@ class AppSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAppSelectBinding.inflate(inflater, container, false)
-        binding.adBanner.loadAd(Ads.appSelectAd)
         binding.refreshLayout.setOnRefreshListener { refresh() }.autoRefresh()
         return binding.root
     }

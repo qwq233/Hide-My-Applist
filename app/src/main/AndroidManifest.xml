@@ -65,10 +65,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7935522387526005~2750782344" />
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
