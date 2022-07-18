@@ -6,12 +6,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.kyuubiran.ezxhelper.utils.runOnMainThread
 import com.tsng.hidemyapplist.R
 import com.tsng.hidemyapplist.app.helpers.AppInfoHelper
 import com.tsng.hidemyapplist.app.ui.adapters.AppSelectAdapter
 import com.tsng.hidemyapplist.databinding.FragmentAppSelectBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.Collator
 import java.util.*
 import kotlin.concurrent.thread
@@ -49,7 +52,11 @@ class AppSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAppSelectBinding.inflate(inflater, container, false)
-        binding.refreshLayout.setOnRefreshListener { refresh() }.autoRefresh()
+        binding.refreshLayout.setOnRefreshListener {
+            lifecycleScope.launch { refresh() }
+        }
+        binding.refreshLayout.isRefreshing = true
+        lifecycleScope.launch { refresh() }
         return binding.root
     }
 
@@ -87,14 +94,14 @@ class AppSelectFragment : Fragment() {
         return true
     }
 
-    private fun refresh() {
-        thread {
-            initAppListView()
-            runOnMainThread { binding.refreshLayout.finishRefresh() }
+    private suspend fun refresh() {
+        initAppListView()
+        withContext(Dispatchers.Main) {
+            binding.refreshLayout.isRefreshing = false
         }
     }
 
-    private fun initAppListView() {
+    private suspend fun initAppListView() {
         val appInfoList = AppInfoHelper.getAppInfoList()
         appInfoList.sortWith { o1, o2 ->
             val c1 = selectedApps.contains(o1.packageName)
@@ -102,7 +109,7 @@ class AppSelectFragment : Fragment() {
             if (c1 != c2) return@sortWith if (c1) -1 else 1
             Collator.getInstance(Locale.getDefault()).compare(o1.appName, o2.appName)
         }
-        runOnMainThread {
+        withContext(Dispatchers.Main) {
             binding.appSelect.layoutManager = LinearLayoutManager(activity)
             adapter = AppSelectAdapter(isShowSystemApp, true, appInfoList, selectedApps)
             binding.appSelect.adapter = adapter

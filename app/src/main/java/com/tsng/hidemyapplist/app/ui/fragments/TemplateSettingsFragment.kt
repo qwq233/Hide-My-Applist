@@ -6,15 +6,14 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.tsng.hidemyapplist.JsonConfig
 import com.tsng.hidemyapplist.R
 import com.tsng.hidemyapplist.app.JsonConfigManager
 import com.tsng.hidemyapplist.app.JsonConfigManager.globalConfig
-import com.tsng.hidemyapplist.app.deepCopy
 import com.tsng.hidemyapplist.app.makeToast
 import com.tsng.hidemyapplist.app.startFragment
 import com.tsng.hidemyapplist.app.ui.views.FilterRulesView
 import com.tsng.hidemyapplist.databinding.FragmentTemplateSettingsBinding
+import icu.nullptr.hidemyapplist.common.JsonConfig
 
 class TemplateSettingsFragment : Fragment() {
     companion object {
@@ -40,7 +39,7 @@ class TemplateSettingsFragment : Fragment() {
         val isWhitelist = requireArguments().getBoolean("isWhitelist")
         oldTemplateName = requireArguments().getString("templateName")
         template = if (oldTemplateName == null) JsonConfig.Template(isWhitelist)
-        else globalConfig.templates[oldTemplateName]!!.deepCopy()
+        else globalConfig.templates[oldTemplateName]!!.copy()
 
         setFragmentResultListener("appSelectResult") { _, bundle ->
             bundle.getStringArray("selectedApps")?.let {
@@ -63,7 +62,6 @@ class TemplateSettingsFragment : Fragment() {
             else getString(R.string.template_apps_invisible_count)
         )
         initAppListView()
-        initMapsRulesView()
         initQueryParamRulesView()
         return binding.root
     }
@@ -143,17 +141,6 @@ class TemplateSettingsFragment : Fragment() {
             setListCount(template.appList.size)
             setOnButtonClickListener {
                 startFragment(AppSelectFragment.newInstance(template.appList.toTypedArray()))
-            }
-        }
-    }
-
-    private fun initMapsRulesView() {
-        with(binding.mapsRules) {
-            setListCount(template.mapsRules.size)
-            setOnButtonClickListener {
-                FilterRulesView.show(activity, template.mapsRules) {
-                    setListCount(template.mapsRules.size)
-                }
             }
         }
     }
