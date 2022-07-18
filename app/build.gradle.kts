@@ -79,7 +79,6 @@ dependencies {
     implementation("com.drakeet.multitype:multitype:4.3.0")
     implementation("com.github.topjohnwu.libsu:core:3.1.2")
     implementation("com.google.android.material:material:1.6.1")
-    implementation("com.google.android.gms:play-services-ads:21.0.0")
     implementation("com.google.firebase:firebase-analytics-ktx:21.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("dev.rikka.hidden:compat:2.3.1")
